@@ -5,8 +5,9 @@ import styled from 'styled-components';
 import { Container } from '../styled-components-folder/Container'
 import Header from '../components/header';
 
-const MainPage =()=> {
+class MainPage extends Component {
 
+    render(){
         return (
             <>
                 
@@ -21,7 +22,7 @@ const MainPage =()=> {
                     </Grid>
             </>
         );
-    
+                    };
 }
 
 const Grid = styled.div`

@@ -9,42 +9,44 @@ import { Price } from '../styled-components-folder/Price';
 import Plus from '../components/small/plus';
 import Minus from '../components/small/minus';
 
-const CartPage = () => {
-    let { Name, Description, InpPrice, numberOf} = { 
-        Name: 'Apollo',
-         Description: 'Running Short',
-          InpPrice: '$50.00',
-           numberOf: 1,
-         }
+class CartPage extends Component {
+    constructor(props) {
+        super(props);
+        this.Name='Apollo';
+         this.Description ='Running Short';
+        this.InpPrice='$50.00';
+         this.numberOf  = 1 ;
+    }
 
-    return (
-        <>
+    render() {
+        return (
+            <>
 
 
-            <Text>Category name</Text>
+                <Text>Category name</Text>
 
-            <FlexRow>
+                <FlexRow>
 
-                <FlexColTwo>
-                    <h2>{Name}</h2>
-                    <p>{Description}</p>
-                    <Price bold>{InpPrice}</Price>
-                    <FlexRowTwo>
-                        <SizeButton>S</SizeButton>
-                        <SizeButton isActive>M</SizeButton>
-                    </FlexRowTwo>
-                </FlexColTwo>
-                <FlexCol>
-                    <Square >+</Square>
-                    <i>{numberOf}</i>
-                    <Square >-</Square>
-                </FlexCol>
+                    <FlexColTwo>
+                        <h2>{this.Name}</h2>
+                        <p>{this.Description}</p>
+                        <Price bold>{this.InpPrice}</Price>
+                        <FlexRowTwo>
+                            <SizeButton>S</SizeButton>
+                            <SizeButton isActive>M</SizeButton>
+                        </FlexRowTwo>
+                    </FlexColTwo>
+                    <FlexCol>
+                        <Square >+</Square>
+                        <i>{this.numberOf}</i>
+                        <Square >-</Square>
+                    </FlexCol>
 
-                <Image src={test} alt="kek" />
-            </FlexRow>
-        </>
-    );
-
+                    <Image src={test} alt="kek" />
+                </FlexRow>
+            </>
+        );
+    }
 }
 
 
