@@ -6,17 +6,22 @@ import Header from '../components/header';
 import { Price } from '../styled-components-folder/Price';
 import {PrimaryButton} from '../styled-components-folder/PrimaryButton'
 import {COLORS} from '../assets/Constants'
+import { useQuery } from '@apollo/client';
+import {GET_ALL_ITEMS_BY_TYPE} from '../services/graphql/description'
 
 
-class DescriptionPage extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {}
+const DescriptionPage =()=> {
+    const { data, loading, error, refetch } = useQuery(GET_ALL_ITEMS_BY_TYPE,{
+        variables: { title:""},
+    })
+    
+    if(loading){
+        return <p>loading...</p>
     }
-    render() {
+    console.log(data)
         return (
             <>
-                
+                {/* <p>{data.}</p> */}
                 <FlexRow style={{ padding: '80px 0 0 0' }}>
                     <FlexCol>
                         <SmallImg src={test}/>
@@ -42,7 +47,6 @@ class DescriptionPage extends Component {
                 </FlexRow>
             </>
         );
-    }
 }
 
 const FlexRow=styled.div`

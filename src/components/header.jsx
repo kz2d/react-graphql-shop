@@ -7,12 +7,14 @@ import { ReactComponent as BottomArrow } from '../assets/svg/bottom-arrow.svg'
 import { ReactComponent as Cart } from '../assets/svg/cart.svg'
 import SmallItem from './small-cart-item';
 import { PrimaryButton } from '../styled-components-folder/PrimaryButton';
-
+import { useQuery } from '@apollo/client';
+import { GET_ALL_CURRENCY } from '../services/graphql/header';
 
 const Header = () => {
     const [CartShow, setCartShow] = useState(false);
     const [CurencyShow, setCurencyShow] = useState(false);
-
+    const {data, loading, error, refetch} = useQuery(GET_ALL_CURRENCY)
+    
     return ( 
         <>  
                  <Grey onClick={e=>setCartShow(false)} style={{opacity:CartShow?'80%':'0', display:CartShow?'':'none'}}/>
@@ -42,9 +44,10 @@ const Header = () => {
                     <span>$</span>
                     <BottomArrow style={{transform:CurencyShow&&'rotate3d(1, 0, 0, 180deg)'}}/>
                     <ul style={{opacity:CurencyShow?'100%':'0', display:CurencyShow?'':'none'}}>
-                        <li>$ USD</li>
+                        {/* <li>$ USD</li>
                         <li>€ EUR</li>
-                        <li>¥ JPY</li>
+                        <li>¥ JPY</li> */}
+                        {loading?<li></li>:data.currencies.map((cur)=><li>{cur}</li>)}
                     </ul>
                 </DolarSign>
                 <CartSign >
@@ -142,7 +145,7 @@ svg{
         height:170px;
         top:40px;
         right:0;
-        width:114px;
+        width:90px;
         list-style:none;
         background-color:${COLORS.background};
 
