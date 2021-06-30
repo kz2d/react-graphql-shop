@@ -4,8 +4,21 @@ import test from '../assets/test.png'
 import Plus from './small/plus'
 import Minus from './small/minus'
 import { COLORS } from '../assets/Constants';
+import { MoneyTypeSymbol } from '../assets/Constants';
 
-const SmallItem = ({ ImgURL, Name, InpPrice, numberOf }) => {
+const SmallItem = ({ ImgURL, Name, InpPrice, numberOf, cart,CurrencyNum }) => {
+    
+
+    function AddDelete(num){
+        let obj=cart.cart
+        obj[Name].amount+=num;
+        if (obj[Name].amount<=0){
+            delete obj[Name]
+        }
+        cart.setcart({...obj})
+        console.log(cart.cart)
+    }
+
     return (
         <FlexRow>
 
@@ -18,12 +31,12 @@ const SmallItem = ({ ImgURL, Name, InpPrice, numberOf }) => {
                 </FlexRowTwo>
             </FlexColTwo>
             <FlexCol>
-                <Plus/>
+                <Plus onClick={()=>AddDelete(+1)}/>
                 <i>{numberOf}</i>
-                <Minus/>
+                <Minus onClick={()=>AddDelete(-1)}/>
                 </FlexCol>
 
-            <Image src={test} alt="kek" />
+            <Image src={ImgURL} alt="kek" />
         </FlexRow>
     );
 }

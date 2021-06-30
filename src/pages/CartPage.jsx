@@ -8,45 +8,53 @@ import { COLORS } from '../assets/Constants'
 import { Price } from '../styled-components-folder/Price';
 import Plus from '../components/small/plus';
 import Minus from '../components/small/minus';
+import PriceConv from '../services/priceConverter';
 
-class CartPage extends Component {
-    constructor(props) {
-        super(props);
-        this.Name='Apollo';
-         this.Description ='Running Short';
-        this.InpPrice='$50.00';
-         this.numberOf  = 1 ;
+const CartPage = ({ CurrencyNum, cart }) => {
+
+    let Description = 'Running Short';
+
+    function AddDelete(num,name) {
+        let obj = cart.cart
+        obj[name].amount += num;
+        if (obj[name].amount <= 0) {
+            delete obj[name]
+        }
+        cart.setcart({ ...obj })
     }
 
-    render() {
-        return (
-            <>
+
+    return (
+        <>
 
 
-                <Text>Category name</Text>
+            <Text>Category name</Text>
 
-                <FlexRow>
+            {Object.keys(cart.cart).map((el) => {
+                return <FlexRow key={el}>
 
                     <FlexColTwo>
-                        <h2>{this.Name}</h2>
-                        <p>{this.Description}</p>
-                        <Price bold>{this.InpPrice}</Price>
+                        <h2>{cart.cart[el].name}</h2>
+                        <p>{Description}</p>
+                        <Price bold>
+                            {PriceConv(cart, CurrencyNum, el)}
+                        </Price>
                         <FlexRowTwo>
                             <SizeButton>S</SizeButton>
                             <SizeButton isActive>M</SizeButton>
                         </FlexRowTwo>
                     </FlexColTwo>
                     <FlexCol>
-                        <Square >+</Square>
-                        <i>{this.numberOf}</i>
-                        <Square >-</Square>
+                        <Square onClick={()=>AddDelete(1,cart.cart[el].name)}>+</Square>
+                        <i>{cart.cart[el].amount}</i>
+                        <Square onClick={()=>AddDelete(-1,cart.cart[el].name)}>-</Square>
                     </FlexCol>
 
-                    <Image src={test} alt="kek" />
+                    <Image src={cart.cart[el].img} alt="kek" />
                 </FlexRow>
-            </>
-        );
-    }
+            })}
+        </>
+    );
 }
 
 
@@ -122,6 +130,7 @@ const Square = styled.div`
     place-content: center center;
     border:1px solid ${COLORS.text}; 
     font-size:40px; 
+    cursor:pointer;
 `
 
 const Image = styled.img`

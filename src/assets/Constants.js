@@ -3,3 +3,11 @@ export const COLORS = {
     background: 'white',
     text: '#1D1F22'
   };
+
+  export const MoneyTypeSymbol={
+    "USD":"$",
+    "GBP":"£",
+    "AUD":"A$",
+    "JPY":"¥",
+    "RUB":"₽"
+  }

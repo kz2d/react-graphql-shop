@@ -5,33 +5,42 @@ import { Container } from '../styled-components-folder/Container'
 import Header from '../components/header';
 import { Price } from '../styled-components-folder/Price';
 import {PrimaryButton} from '../styled-components-folder/PrimaryButton'
-import {COLORS} from '../assets/Constants'
+import {COLORS, MoneyTypeSymbol} from '../assets/Constants'
 import { useQuery } from '@apollo/client';
 import {GET_ALL_ITEMS_BY_TYPE} from '../services/graphql/description'
+import { useParams } from 'react-router';
 
-
-const DescriptionPage =()=> {
+const DescriptionPage =({CurrencyNum})=> {
     const { data, loading, error, refetch } = useQuery(GET_ALL_ITEMS_BY_TYPE,{
         variables: { title:""},
     })
+    const {itemID}=useParams();
     
-    if(loading){
+    if(loading)
         return <p>loading...</p>
-    }
+    
     console.log(data)
+    
+    const product=data.category.products.find((element)=>{
+        return element.name===itemID;
+    })
+    if(!product)
+        return <p>loading...</p>
+
+    console.log(product)
         return (
             <>
-                {/* <p>{data.}</p> */}
                 <FlexRow style={{ padding: '80px 0 0 0' }}>
                     <FlexCol>
-                        <SmallImg src={test}/>
-                        <SmallImg src={test}/>
-                        <SmallImg src={test}/>
+                        {product.gallery.slice(1,product.gallery.length-1).map((el)=>{
+                            return <SmallImg src={el}/>
+                        })}
+                        
                     </FlexCol>
-                    <BigImg src={test}/>
+                    <BigImg src={product.gallery[0]}/>
                     <FlexCol style={{ width: '300px' }} >
-                        <h3>Apollo</h3>
-                        <h5>Running Short</h5>
+                        <h3>{product.name}</h3>
+                        <h5>{product.category}</h5>
                         <h4>SIZE:</h4>
                         <FlexRow style={{ padding: '8px 0 40px 0'}} >
                             <Button disabled>XS</Button>
@@ -40,9 +49,11 @@ const DescriptionPage =()=> {
                             <Button>L</Button>
                         </FlexRow>
                         <h4>PRICE:</h4>
-                        <Price bold  style={{ padding: '24px 0'}}>$50.00</Price>
+                        <Price bold  style={{ padding: '24px 0'}}>{
+                        MoneyTypeSymbol[CurrencyNum]+product.prices.find((e)=>CurrencyNum===e.currency ).amount
+                        }</Price>
                         <PrimaryButton primary>ADD TO CART</PrimaryButton>
-                        <p>Find stunning women's cocktail dresses and party dresses. Stand out in lace and metallic cocktail dresses and party dresses from all your favorite brands.</p>
+                        <FullDescription dangerouslySetInnerHTML={{ __html: product.description }}></FullDescription>
                     </FlexCol>
                 </FlexRow>
             </>
@@ -74,14 +85,15 @@ font-style: normal;
 font-weight: bold;
 font-size: 18px;
     }
-    p{
-        padding-top:40px;
+`
+
+const FullDescription=styled.p`
+  padding-top:40px;
         font-family: Roboto;
 font-style: normal;
 font-weight: normal;
 font-size: 16px;
 line-height: 159.96%;
-    }
 `
 
 const SmallImg=styled.img`

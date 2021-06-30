@@ -9,25 +9,34 @@ import {
   Route,
   Link
 } from "react-router-dom";
+import { useState } from 'react';
 
 function App() {
+  const [cart,setcart]=useState({});
+  const [Currency,setCurrency]=useState('USD');
+console.log(cart)
   return (
     <Router>
     <Container>
-      <Header/>
+      <Header Currency={{Currency,setCurrency}} 
+      cart={{cart , setcart}} />
     
     
     <Switch>
           
           <Route path="/cart">
-          <CartPage/>
+          <CartPage
+          CurrencyNum={Currency} 
+          cart={{cart , setcart}}/>
           </Route>
           <Route path="/description/:itemID">
-            <DescriptionPage />
+            <DescriptionPage  CurrencyNum={Currency} 
+            cart={{cart , setcart}}/>
           </Route>
 
           <Route path="/">
-            <MainPage />
+            <MainPage CurrencyNum={Currency} 
+            cart={{cart , setcart}}/>
           </Route>
         </Switch>
 

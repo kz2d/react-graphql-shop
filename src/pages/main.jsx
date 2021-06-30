@@ -6,8 +6,9 @@ import { Container } from '../styled-components-folder/Container'
 import Header from '../components/header';
 import { useQuery } from '@apollo/client';
 import {GET_ALL_ITEMS_BY_TYPE} from '../services/graphql/main'
+import { MoneyTypeSymbol } from '../assets/Constants';
 
-const MainPage = () => {
+const MainPage = ({CurrencyNum, cart}) => {
     const { data, loading, error, refetch } = useQuery(GET_ALL_ITEMS_BY_TYPE,{
         variables: { title:""},
     })
@@ -25,7 +26,11 @@ const MainPage = () => {
             data.category.products.map((value) => {
                 return <MiddleItem ImgURL={value.gallery[0]}
                     Name={value.name}
-                    InpPrice={value.prices[0].amount} />
+                    InpPrice={value.prices}
+                    isStock={value.inStock}
+                    cart={cart}
+                    currencyNum={CurrencyNum}
+                     key={value.name}/>
             })}
             </Grid>
             }

@@ -2,18 +2,28 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { Logo } from '../styled-components-folder/logo';
 import { Container } from '../styled-components-folder/Container';
-import { COLORS } from '../assets/Constants'
+import { COLORS, MoneyTypeSymbol } from '../assets/Constants'
 import { ReactComponent as BottomArrow } from '../assets/svg/bottom-arrow.svg'
 import { ReactComponent as Cart } from '../assets/svg/cart.svg'
 import SmallItem from './small-cart-item';
 import { PrimaryButton } from '../styled-components-folder/PrimaryButton';
 import { useQuery } from '@apollo/client';
 import { GET_ALL_CURRENCY } from '../services/graphql/header';
+import { useHistory } from 'react-router-dom';
 
-const Header = () => {
+const Header = ({Currency,cart}) => {
     const [CartShow, setCartShow] = useState(false);
     const [CurencyShow, setCurencyShow] = useState(false);
     const {data, loading, error, refetch} = useQuery(GET_ALL_CURRENCY)
+    let history=useHistory()
+    console.log(cart.cart)
+
+    let sum=0;
+
+    function Link(href){
+          setCartShow(false)
+          history.push(href)
+    }
     
     return ( 
         <>  
@@ -37,7 +47,8 @@ const Header = () => {
 
             </Left>
             <LogoWraper>
-                <Logo />
+                
+                <Logo onClick={()=>Link('/')} />
             </LogoWraper>
             <Right>
                 <DolarSign onClick={()=>setCurencyShow(!CurencyShow)}>
@@ -47,32 +58,46 @@ const Header = () => {
                         {/* <li>$ USD</li>
                         <li>€ EUR</li>
                         <li>¥ JPY</li> */}
-                        {loading?<li></li>:data.currencies.map((cur)=><li>{cur}</li>)}
+                        {loading?<li></li>:data.currencies.map((cur)=>
+                        <li onClick={()=>Currency.setCurrency(cur)}>
+                            {MoneyTypeSymbol[cur]+' '+ cur}
+                            </li>)}
                     </ul>
                 </DolarSign>
                 <CartSign >
                     
                     <CartWraper onClick={()=>setCartShow(!CartShow)}>
                     <Cart />
-                    <Number>2</Number>
+                    <Number>{Object.keys(cart.cart).length}</Number>
                     </CartWraper>
                     <SmallCart 
                      style={{opacity:CartShow?'100%':'0', display:CartShow?'':'none'}}>
                         My Bag, 2 items
-                        <SmallItem
-                            ImgURL='test.png'
-                            InpPrice='$50.00'
-                            Name="Jupiter Wayfarer"
-                            numberOf='2'
+                        {Object.keys(cart.cart).map((el)=>{
+                            let specialPrice=cart.cart[el].price.find((e)=>
+                            Currency.Currency===e.currency ).amount;
+                            sum+=cart.cart[el].amount*specialPrice
+
+                            return <SmallItem
+                            ImgURL={cart.cart[el].img}
+                            InpPrice={MoneyTypeSymbol[Currency.Currency]+specialPrice}
+                            Name={cart.cart[el].name}
+                            numberOf={cart.cart[el].amount}
+                            cart={cart}
                         />
+                        })}
+                        
                         <TotalPrice>
                             <p>Total</p>
-                            <span>$100.00</span>
+                            <span>{MoneyTypeSymbol[Currency.Currency]+Math.round(sum*100)/100}</span>
                         </TotalPrice>
+                        
                         <ButtonBar>
-                            <PrimaryButton><span>View bag</span></PrimaryButton>
-                            <PrimaryButton primary><span>View bag</span></PrimaryButton>
+                            <PrimaryButton onClick={()=>Link('/cart')}><span>View bag</span></PrimaryButton>
+                            <PrimaryButton onClick={()=>Link('/cart')} primary><span>View bag</span></PrimaryButton>
+                            
                         </ButtonBar>
+                        
                     </SmallCart>
                 </CartSign>
             </Right>
@@ -145,7 +170,7 @@ svg{
         height:170px;
         top:40px;
         right:0;
-        width:90px;
+        width:130px;
         list-style:none;
         background-color:${COLORS.background};
 
