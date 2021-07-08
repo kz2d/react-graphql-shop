@@ -4,45 +4,59 @@ import CartPage from './pages/CartPage';
 import { Container } from './styled-components-folder/Container';
 import Header from './components/header';
 import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link
+    BrowserRouter as Router,
+    Switch,
+    Route,
+    Link
 } from "react-router-dom";
-import { useState } from 'react';
+import { useState , useContext} from 'react';
+import styled from 'styled-components'
+import {useOpendState, useOpendDispatch} from './services/context/WhatWindowIsOpen.js'
 
 function App() {
-  const [cart,setcart]=useState({});
-  const [Currency,setCurrency]=useState('USD');
-console.log(cart)
-  return (
-    <Router>
-    <Container>
-      <Header Currency={{Currency,setCurrency}} 
-      cart={{cart , setcart}} />
-    
-    
-    <Switch>
-          
-          <Route path="/cart">
-          <CartPage
-          CurrencyNum={Currency} 
-          cart={{cart , setcart}}/>
-          </Route>
-          <Route path="/description/:itemID">
-            <DescriptionPage  CurrencyNum={Currency} 
-            cart={{cart , setcart}}/>
-          </Route>
+    const isGrey = useOpendState();
+    return (
+        <Router>
+            <Container>
+                <Header />
 
-          <Route path="/">
-            <MainPage CurrencyNum={Currency} 
-            cart={{cart , setcart}}/>
-          </Route>
-        </Switch>
+                <Grey disabled={isGrey}/>
+                    <Switch>
 
-        </Container>
-    </Router>
-  );
+                        <Route path="/cart">
+                            <CartPage />
+                        </Route>
+                        <Route path="/description/:itemID">
+                            <DescriptionPage  />
+                        </Route>
+
+                        <Route path="/">
+                            <MainPage/>
+                        </Route>
+                    </Switch>
+                
+            </Container>
+        </Router>
+    );
 }
+
+const Grey = styled.div`
+    display:${(props)=>!props.disabled?'none':'block'};
+    background-color: black;
+    opacity:80%;
+    z-index:5;
+    position: absolute;
+    top: 80px;
+    right: calc(600px - 50vw + 10px);
+    bottom: 0;
+
+    width: 100vw; /* or whatever */
+    height:100%;
+    content:'';
+     @media (max-width: 1200px) {
+        right:0;
+        width:100%;
+    }
+`
 
 export default App;

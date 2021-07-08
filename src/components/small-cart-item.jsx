@@ -1,42 +1,39 @@
 import styled, { css } from 'styled-components'
 import { Price } from '../styled-components-folder/Price';
-import test from '../assets/test.png'
 import Plus from './small/plus'
 import Minus from './small/minus'
 import { COLORS } from '../assets/Constants';
 import { MoneyTypeSymbol } from '../assets/Constants';
+import { useCartState, useCartDispatch } from '../services/context/Cart';
+import { useCurrencyState } from '../services/context/Currency';
 
-const SmallItem = ({ ImgURL, Name, InpPrice, numberOf, cart,CurrencyNum }) => {
+const SmallItem = ({ item  }) => {
+    const Cart=useCartState()
+    const setCart=useCartDispatch()
+    const Currency=useCurrencyState()
     
-
-    function AddDelete(num){
-        let obj=cart.cart
-        obj[Name].amount+=num;
-        if (obj[Name].amount<=0){
-            delete obj[Name]
-        }
-        cart.setcart({...obj})
-        console.log(cart.cart)
-    }
 
     return (
         <FlexRow>
 
             <FlexColTwo>
-                <p>{Name}</p>
-                <Price>{InpPrice}</Price>
+                <p>{item.Name}</p>
+
+                <Price>{MoneyTypeSymbol[Currency]+Cart[item.name].price.find((e)=>
+                            Currency===e.currency ).amount}</Price>
+
                 <FlexRowTwo>
                     <SizeButton>S</SizeButton>
                     <SizeButton disabled>M</SizeButton>
                 </FlexRowTwo>
             </FlexColTwo>
             <FlexCol>
-                <Plus onClick={()=>AddDelete(+1)}/>
-                <i>{numberOf}</i>
-                <Minus onClick={()=>AddDelete(-1)}/>
+                <Plus onClick={()=>setCart({name:item.name, type:'add'})}/>
+                <i>{item.amount}</i>
+                <Minus onClick={()=>setCart({name:item.name, type:'delete'})}/>
                 </FlexCol>
 
-            <Image src={ImgURL} alt="kek" />
+            <Image src={item.img} alt="kek" />
         </FlexRow>
     );
 }

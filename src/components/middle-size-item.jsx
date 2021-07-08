@@ -4,8 +4,13 @@ import { ReactComponent as Cart } from '../assets/svg/cart.svg'
 import {COLORS } from '../assets/Constants'
 import { Link } from 'react-router-dom'
 import { MoneyTypeSymbol } from '../assets/Constants'
+import { useCurrencyState } from '../services/context/Currency'
+import { useCartDispatch } from '../services/context/Cart'
 
-const MiddleItem = ({ImgURL, Name, InpPrice,isStock,cart,currencyNum}) => {
+const MiddleItem = ({ImgURL, Name, InpPrice,isStock}) => {
+    const Currency=useCurrencyState()
+    const setCart=useCartDispatch()
+
   if(!isStock)
   return(
     <ContainerNone>
@@ -14,31 +19,25 @@ const MiddleItem = ({ImgURL, Name, InpPrice,isStock,cart,currencyNum}) => {
             <Stock>OUT OF STOCK</Stock>
             <NameOfItem>{Name}</NameOfItem>
             <Price>{
-            MoneyTypeSymbol[currencyNum]+InpPrice.find((e)=>
-                currencyNum===e.currency ).amount}</Price>
+            MoneyTypeSymbol[Currency]+InpPrice.find((e)=>
+                Currency===e.currency ).amount}</Price>
         </ContainerNone>
   )
-console.log(cart[Name])
     return (
         <Container>
           <Link to={'description/'+Name}>
             <Image src={ImgURL} alt="kek" />
             <NameOfItem>{Name}</NameOfItem>
-            <Price>{MoneyTypeSymbol[currencyNum]+InpPrice.find((e)=>
-                currencyNum===e.currency ).amount
+            <Price>{MoneyTypeSymbol[Currency]+InpPrice.find((e)=>
+                Currency===e.currency ).amount
             }</Price>
             </Link>
 
-            <CartCurcle onClick={()=>{
-              let obj=cart.cart;
-              obj[Name]={amount:obj[Name]?obj[Name].amount+1:0+1,
-              name:Name,
-              price:InpPrice,
-              img:ImgURL}
-              cart.setcart({...obj})}
-              }>
+            <CartCircle onClick={()=>{
+              setCart({type:'add', name:Name, img:ImgURL,price:InpPrice})
+              }}>
               <Cart/>
-            </CartCurcle>
+            </CartCircle>
         </Container>
     );
 }
@@ -82,6 +81,7 @@ const Image = styled.img`
   height:330px;
   width:330px;
   object-fit: cover;
+  z-index:0;
 `
 
 const NameOfItem = styled.p`
@@ -92,7 +92,7 @@ const NameOfItem = styled.p`
     padding:15px 0 5px 0;
 `
 
-const CartCurcle = styled.div`
+const CartCircle = styled.div`
   position:absolute;
   background-color:${COLORS.primary};
   border-radius:50%;

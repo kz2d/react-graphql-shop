@@ -29,7 +29,6 @@ const MainPage = ({CurrencyNum, cart}) => {
                     InpPrice={value.prices}
                     isStock={value.inStock}
                     cart={cart}
-                    currencyNum={CurrencyNum}
                      key={value.name}/>
             })}
             </Grid>

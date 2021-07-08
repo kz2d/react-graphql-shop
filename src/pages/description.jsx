@@ -9,12 +9,16 @@ import {COLORS, MoneyTypeSymbol} from '../assets/Constants'
 import { useQuery } from '@apollo/client';
 import {GET_ALL_ITEMS_BY_TYPE} from '../services/graphql/description'
 import { useParams } from 'react-router';
+import { useCurrencyState } from '../services/context/Currency';
+import {useCartDispatch} from '../services/context/Cart'
 
-const DescriptionPage =({CurrencyNum})=> {
+const DescriptionPage =()=> {
     const { data, loading, error, refetch } = useQuery(GET_ALL_ITEMS_BY_TYPE,{
         variables: { title:""},
     })
     const {itemID}=useParams();
+    const Currency=useCurrencyState()
+    const setCart=useCartDispatch()
     
     if(loading)
         return <p>loading...</p>
@@ -33,7 +37,7 @@ const DescriptionPage =({CurrencyNum})=> {
                 <FlexRow style={{ padding: '80px 0 0 0' }}>
                     <FlexCol>
                         {product.gallery.slice(1,product.gallery.length-1).map((el)=>{
-                            return <SmallImg src={el}/>
+                            return <SmallImg src={el} key={el}/>
                         })}
                         
                     </FlexCol>
@@ -50,9 +54,9 @@ const DescriptionPage =({CurrencyNum})=> {
                         </FlexRow>
                         <h4>PRICE:</h4>
                         <Price bold  style={{ padding: '24px 0'}}>{
-                        MoneyTypeSymbol[CurrencyNum]+product.prices.find((e)=>CurrencyNum===e.currency ).amount
+                        MoneyTypeSymbol[Currency]+product.prices.find((e)=>Currency===e.currency ).amount
                         }</Price>
-                        <PrimaryButton primary>ADD TO CART</PrimaryButton>
+                        <PrimaryButton onClick={()=>{setCart({type:'add', name:product.name, img:product.gallery[0],price:product.prices})}} primary>ADD TO CART</PrimaryButton>
                         <FullDescription dangerouslySetInnerHTML={{ __html: product.description }}></FullDescription>
                     </FlexCol>
                 </FlexRow>

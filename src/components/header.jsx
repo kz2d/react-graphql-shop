@@ -1,34 +1,38 @@
-import React, { useState } from 'react';
+import React, { useState, useContext} from 'react';
 import styled from 'styled-components';
 import { Logo } from '../styled-components-folder/logo';
 import { Container } from '../styled-components-folder/Container';
 import { COLORS, MoneyTypeSymbol } from '../assets/Constants'
 import { ReactComponent as BottomArrow } from '../assets/svg/bottom-arrow.svg'
-import { ReactComponent as Cart } from '../assets/svg/cart.svg'
+import { ReactComponent as CartSVG } from '../assets/svg/cart.svg'
 import SmallItem from './small-cart-item';
 import { PrimaryButton } from '../styled-components-folder/PrimaryButton';
 import { useQuery } from '@apollo/client';
 import { GET_ALL_CURRENCY } from '../services/graphql/header';
 import { useHistory } from 'react-router-dom';
+import {useOpendState, useOpendDispatch} from '../services/context/WhatWindowIsOpen.js'
+import {useCurrencyState, useCurrencyDispatch} from '../services/context/Currency.js'
+import {useCartState, useCartDispatch } from '../services/context/Cart';
 
-const Header = ({Currency,cart}) => {
-    const [CartShow, setCartShow] = useState(false);
-    const [CurencyShow, setCurencyShow] = useState(false);
+const Header = () => {
+    const WhatToShow = useOpendState()
+    const setWhatToShow = useOpendDispatch()
+    const Currency = useCurrencyState()
+    const setCurrency = useCurrencyDispatch()
+    const Cart=useCartState()
     const {data, loading, error, refetch} = useQuery(GET_ALL_CURRENCY)
     let history=useHistory()
-    console.log(cart.cart)
+    console.log(Cart)
 
     let sum=0;
 
     function Link(href){
-          setCartShow(false)
+          setWhatToShow('')
           history.push(href)
     }
     
     return ( 
         <>  
-                 <Grey onClick={e=>setCartShow(false)} style={{opacity:CartShow?'80%':'0', display:CartShow?'':'none'}}/>
-
         <ContainerHead>
             <Left>
                 <LeftItem selected>
@@ -51,45 +55,41 @@ const Header = ({Currency,cart}) => {
                 <Logo onClick={()=>Link('/')} />
             </LogoWraper>
             <Right>
-                <DolarSign onClick={()=>setCurencyShow(!CurencyShow)}>
+                <DolarSign onClick={()=>setWhatToShow(WhatToShow==='Currency'?'':'Currency')}>
                     <span>$</span>
-                    <BottomArrow style={{transform:CurencyShow&&'rotate3d(1, 0, 0, 180deg)'}}/>
-                    <ul style={{opacity:CurencyShow?'100%':'0', display:CurencyShow?'':'none'}}>
+                    <BottomArrow style={{transform:WhatToShow==='Currency'&&'rotate3d(1, 0, 0, 180deg)'}}/>
+                    <ul style={{opacity:WhatToShow==='Currency'?'100%':'0', display:WhatToShow==='Currency'?'':'none'}}>
                         {/* <li>$ USD</li>
                         <li>€ EUR</li>
                         <li>¥ JPY</li> */}
                         {loading?<li></li>:data.currencies.map((cur)=>
-                        <li onClick={()=>Currency.setCurrency(cur)}>
+                        <li key={cur} onClick={()=>setCurrency(cur)}>
                             {MoneyTypeSymbol[cur]+' '+ cur}
                             </li>)}
                     </ul>
                 </DolarSign>
                 <CartSign >
                     
-                    <CartWraper onClick={()=>setCartShow(!CartShow)}>
-                    <Cart />
-                    <Number>{Object.keys(cart.cart).length}</Number>
+                    <CartWraper onClick={()=>setWhatToShow(WhatToShow==='Cart'?'':'Cart')}>
+                    <CartSVG />
+                    <Number>{Object.keys(Cart).length}</Number>
                     </CartWraper>
                     <SmallCart 
-                     style={{opacity:CartShow?'100%':'0', display:CartShow?'':'none'}}>
+                     style={{opacity:WhatToShow==='Cart'?'100%':'0', display:WhatToShow==='Cart'?'':'none'}}>
                         My Bag, 2 items
-                        {Object.keys(cart.cart).map((el)=>{
-                            let specialPrice=cart.cart[el].price.find((e)=>
-                            Currency.Currency===e.currency ).amount;
-                            sum+=cart.cart[el].amount*specialPrice
+                        {Object.keys(Cart).map((el)=>{
+                            if(Cart[el].amount<=0)console.log('l')
+                            let specialPrice=Cart[el].price.find((e)=>
+                            Currency===e.currency ).amount;
+                            sum+=Cart[el].amount*specialPrice
 
-                            return <SmallItem
-                            ImgURL={cart.cart[el].img}
-                            InpPrice={MoneyTypeSymbol[Currency.Currency]+specialPrice}
-                            Name={cart.cart[el].name}
-                            numberOf={cart.cart[el].amount}
-                            cart={cart}
-                        />
+                            return <SmallItem item={Cart[el]}
+                            key={el}/>
                         })}
                         
                         <TotalPrice>
                             <p>Total</p>
-                            <span>{MoneyTypeSymbol[Currency.Currency]+Math.round(sum*100)/100}</span>
+                            <span>{MoneyTypeSymbol[Currency]+Math.round(sum*100)/100}</span>
                         </TotalPrice>
                         
                         <ButtonBar>
@@ -165,6 +165,7 @@ svg{
         flex-direction:column;
         justify-content:space-between;
         /* align-items:center; */
+        z-index:100;
         padding:20px;
         position:absolute;
         height:170px;
@@ -203,21 +204,10 @@ const SmallCart = styled.div`
     padding:10px;
     right:0;
     z-index:10;
+    min-width:329px;
     transition:opacity 0.5s ease-out;
 `
-const Grey = styled.div`
-    background-color: black;
-    opacity:80%;
-    position:absolute;
-    top:80px;
-    left:0;
-    right:0;
-    height:calc(100vh - 80px);
-    z-index:5;
-    content:'';
-    width: 100%; margin: 0; padding: 0;
-    transition: opacity 1s ease-out;
-`
+
 
 const TotalPrice = styled.div`
     display:flex;
