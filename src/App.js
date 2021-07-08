@@ -15,10 +15,11 @@ import {useOpendState, useOpendDispatch} from './services/context/WhatWindowIsOp
 
 function App() {
     const isGrey = useOpendState();
+    const [Category, setCategory]=useState('')
     return (
         <Router>
             <Container>
-                <Header />
+                <Header category={{Category, setCategory}}/>
 
                 <Grey disabled={isGrey}/>
                     <Switch>
@@ -31,7 +32,7 @@ function App() {
                         </Route>
 
                         <Route path="/">
-                            <MainPage/>
+                            <MainPage category={{Category, setCategory}}/>
                         </Route>
                     </Switch>
                 

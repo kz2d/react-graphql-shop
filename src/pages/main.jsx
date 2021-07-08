@@ -8,9 +8,9 @@ import { useQuery } from '@apollo/client';
 import {GET_ALL_ITEMS_BY_TYPE} from '../services/graphql/main'
 import { MoneyTypeSymbol } from '../assets/Constants';
 
-const MainPage = ({CurrencyNum, cart}) => {
+const MainPage = ({category}) => {
     const { data, loading, error, refetch } = useQuery(GET_ALL_ITEMS_BY_TYPE,{
-        variables: { title:""},
+        variables: { title:category.Category},
     })
 
     return (
@@ -28,7 +28,6 @@ const MainPage = ({CurrencyNum, cart}) => {
                     Name={value.name}
                     InpPrice={value.prices}
                     isStock={value.inStock}
-                    cart={cart}
                      key={value.name}/>
             })}
             </Grid>
@@ -41,7 +40,7 @@ export default MainPage;
 
 const Grid = styled.div`
     display:grid;
-    grid-template-columns: auto auto auto;
+    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));;
     grid-row-gap:100px;
     justify-content: space-between;
 `

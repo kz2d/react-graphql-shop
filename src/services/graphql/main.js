@@ -15,18 +15,7 @@ export const GET_ALL_ITEMS_BY_TYPE = gql`
       name
       inStock
       gallery
-      description
       category
-      attributes{
-        id
-        name
-        type
-        items{
-          displayValue
-          value
-          id
-        }
-      }
       prices{
         currency
         amount

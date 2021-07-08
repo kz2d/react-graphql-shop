@@ -14,7 +14,7 @@ import {useOpendState, useOpendDispatch} from '../services/context/WhatWindowIsO
 import {useCurrencyState, useCurrencyDispatch} from '../services/context/Currency.js'
 import {useCartState, useCartDispatch } from '../services/context/Cart';
 
-const Header = () => {
+const Header = ({category}) => {
     const WhatToShow = useOpendState()
     const setWhatToShow = useOpendDispatch()
     const Currency = useCurrencyState()
@@ -22,7 +22,7 @@ const Header = () => {
     const Cart=useCartState()
     const {data, loading, error, refetch} = useQuery(GET_ALL_CURRENCY)
     let history=useHistory()
-    console.log(Cart)
+    console.log(category)
 
     let sum=0;
 
@@ -35,16 +35,16 @@ const Header = () => {
         <>  
         <ContainerHead>
             <Left>
-                <LeftItem selected>
-                    <span>Women</span>
+                <LeftItem onClick={()=>{category.setCategory('')}} selected={category.Category===''}>
+                    <span>ALL</span>
 
                 </LeftItem>
-                <LeftItem>
-                    <span>Women</span>
+                <LeftItem onClick={()=>{category.setCategory('clothes')}} selected={category.Category==='clothes'}>
+                    <span>Clothes</span>
 
                 </LeftItem>
-                <LeftItem>
-                    <span>Women</span>
+                <LeftItem onClick={()=>{category.setCategory('tech')}} selected={category.Category==='tech'}>
+                    <span>Tech</span>
 
                 </LeftItem>
 
@@ -76,9 +76,8 @@ const Header = () => {
                     </CartWraper>
                     <SmallCart 
                      style={{opacity:WhatToShow==='Cart'?'100%':'0', display:WhatToShow==='Cart'?'':'none'}}>
-                        My Bag, 2 items
+                        <h2>My Bag</h2>, 2 items
                         {Object.keys(Cart).map((el)=>{
-                            if(Cart[el].amount<=0)console.log('l')
                             let specialPrice=Cart[el].price.find((e)=>
                             Currency===e.currency ).amount;
                             sum+=Cart[el].amount*specialPrice
@@ -206,6 +205,10 @@ const SmallCart = styled.div`
     z-index:10;
     min-width:329px;
     transition:opacity 0.5s ease-out;
+
+    h2{
+        display:contents;
+    }
 `
 
 
@@ -237,6 +240,7 @@ justify-content:center;
    position:absolute;
     right:0;
     left:0;
+    z-index:-2;
 `
 
 const ButtonBar = styled.div`
