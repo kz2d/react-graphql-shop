@@ -1,45 +1,53 @@
 import styled from 'styled-components'
-import {Price} from '../styled-components-folder/Price'
+import { Price } from '../styled-components-folder/Price'
 import { ReactComponent as Cart } from '../assets/svg/cart.svg'
-import {COLORS } from '../assets/Constants'
+import { COLORS } from '../assets/Constants'
 import { Link } from 'react-router-dom'
 import { MoneyTypeSymbol } from '../assets/Constants'
-import { useCurrencyState } from '../services/context/Currency'
-import { useCartDispatch } from '../services/context/Cart'
+import { Component } from 'react'
+import {MainContext} from '../services/context'
 
-const MiddleItem = ({ImgURL, Name, InpPrice,isStock}) => {
-    const Currency=useCurrencyState()
-    const setCart=useCartDispatch()
 
-  if(!isStock)
-  return(
-    <ContainerNone>
-      <Grey/>
-            <Image src={ImgURL} alt="kek" />
-            <Stock>OUT OF STOCK</Stock>
-            <NameOfItem>{Name}</NameOfItem>
-            <Price>{
-            MoneyTypeSymbol[Currency]+InpPrice.find((e)=>
-                Currency===e.currency ).amount}</Price>
-        </ContainerNone>
-  )
-    return (
-        <Container>
-          <Link to={'description/'+Name}>
-            <Image src={ImgURL} alt="kek" />
-            <NameOfItem>{Name}</NameOfItem>
-            <Price>{MoneyTypeSymbol[Currency]+InpPrice.find((e)=>
-                Currency===e.currency ).amount
-            }</Price>
-            </Link>
+class MiddleItem extends Component {
+    static contextType=MainContext
+    render() {
 
-            <CartCircle onClick={()=>{
-              setCart({type:'add', name:Name, img:ImgURL,price:InpPrice})
-              }}>
-              <Cart/>
-            </CartCircle>
-        </Container>
-    );
+
+        const Currency = this.context.Currency
+        const setCart = this.context.setCart
+        console.log(Currency)
+
+        if (!this.props.isStock)
+            return (
+                <ContainerNone>
+                    <Grey />
+                    <Image src={this.props.ImgURL} alt="kek" />
+                    <Stock>OUT OF STOCK</Stock>
+                    <NameOfItem>{this.props.Name}</NameOfItem>
+                    <Price>{
+                        MoneyTypeSymbol[Currency] + this.props.InpPrice.find((e) =>
+                            Currency === e.currency).amount}</Price>
+                </ContainerNone>
+            )
+        return (
+            <Container>
+                <Link to={'description/' + this.props.Name}>
+                    <Image src={this.props.ImgURL} alt="kek" />
+                    <NameOfItem>{this.props.Name}</NameOfItem>
+                    <Price>{MoneyTypeSymbol[Currency] + this.props.InpPrice.find((e) =>
+                        Currency === e.currency).amount
+                    }</Price>
+                </Link>
+
+                <CartCircle >
+                    {/* onClick={() => {
+                    setCart({ type: 'add', name: this.props.Name, img: this.props.ImgURL, price: this.props.InpPrice })
+                }} */}
+                    <Cart />
+                </CartCircle>
+            </Container>
+        );
+    }
 }
 
 const Container = styled.div`

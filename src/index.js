@@ -3,9 +3,6 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client'
-import {OpendProvider} from './services/context/WhatWindowIsOpen.js'
-import {CurrencyProvider} from './services/context/Currency.js'
-import {CartProvider} from './services/context/Cart.js'
 //import reportWebVitals from './reportWebVitals';
 
 
@@ -17,13 +14,7 @@ const client = new ApolloClient({
 
 ReactDOM.render(
   <ApolloProvider client={client}>
-      <OpendProvider>
-          <CurrencyProvider>
-              <CartProvider>
     <App />
-    </CartProvider>
-    </CurrencyProvider>
-    </OpendProvider>
     </ApolloProvider>,
   document.getElementById('root')
 );

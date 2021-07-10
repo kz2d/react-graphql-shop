@@ -1,4 +1,4 @@
-import React, { useState, useContext} from 'react';
+import React, { Component} from 'react';
 import styled from 'styled-components';
 import { Logo } from '../styled-components-folder/logo';
 import { Container } from '../styled-components-folder/Container';
@@ -7,43 +7,45 @@ import { ReactComponent as BottomArrow } from '../assets/svg/bottom-arrow.svg'
 import { ReactComponent as CartSVG } from '../assets/svg/cart.svg'
 import SmallItem from './small-cart-item';
 import { PrimaryButton } from '../styled-components-folder/PrimaryButton';
-import { useQuery } from '@apollo/client';
 import { GET_ALL_CURRENCY } from '../services/graphql/header';
-import { useHistory } from 'react-router-dom';
-import {useOpendState, useOpendDispatch} from '../services/context/WhatWindowIsOpen.js'
-import {useCurrencyState, useCurrencyDispatch} from '../services/context/Currency.js'
-import {useCartState, useCartDispatch } from '../services/context/Cart';
+import {MainContext} from '../services/context'
+import Query from '../services/graphql/component'
+import {withRouter} from 'react-router-dom'
 
-const Header = ({category}) => {
-    const WhatToShow = useOpendState()
-    const setWhatToShow = useOpendDispatch()
-    const Currency = useCurrencyState()
-    const setCurrency = useCurrencyDispatch()
-    const Cart=useCartState()
-    const {data, loading, error, refetch} = useQuery(GET_ALL_CURRENCY)
-    let history=useHistory()
-    console.log(category)
+class Header extends Component {
+    static contextType=MainContext;
+    
 
-    let sum=0;
-
-    function Link(href){
-          setWhatToShow('')
-          history.push(href)
+    Link(href){
+        console.log(this.props)
+          this.context.setOpend('')
+          this.props.history.push(href)
     }
     
+    render(){
+        console.log(this.context)
+        let sum=0;
+        const WhatToShow = this.context.Opend
+        const setWhatToShow = this.context.setOpend
+        const Currency = this.context.Currency
+        const setCurrency = this.context.setCurrency
+        const Cart=this.context.Cart
+        const Category=this.context.Category
+        const setCategory=this.context.setCategory
+
     return ( 
-        <>  
+        <Query Querry={GET_ALL_CURRENCY}>{(data,loading)=>
         <ContainerHead>
             <Left>
-                <LeftItem onClick={()=>{category.setCategory('')}} selected={category.Category===''}>
+                <LeftItem onClick={()=>{setCategory('')}} selected={Category===''}>
                     <span>ALL</span>
 
                 </LeftItem>
-                <LeftItem onClick={()=>{category.setCategory('clothes')}} selected={category.Category==='clothes'}>
+                <LeftItem onClick={()=>{setCategory('clothes')}} selected={Category==='clothes'}>
                     <span>Clothes</span>
 
                 </LeftItem>
-                <LeftItem onClick={()=>{category.setCategory('tech')}} selected={category.Category==='tech'}>
+                <LeftItem onClick={()=>{setCategory('tech')}} selected={Category==='tech'}>
                     <span>Tech</span>
 
                 </LeftItem>
@@ -52,7 +54,7 @@ const Header = ({category}) => {
             </Left>
             <LogoWraper>
                 
-                <Logo onClick={()=>Link('/')} />
+                <Logo onClick={()=>{this.Link('/')}} />
             </LogoWraper>
             <Right>
                 <DolarSign onClick={()=>setWhatToShow(WhatToShow==='Currency'?'':'Currency')}>
@@ -92,8 +94,8 @@ const Header = ({category}) => {
                         </TotalPrice>
                         
                         <ButtonBar>
-                            <PrimaryButton onClick={()=>Link('/cart')}><span>View bag</span></PrimaryButton>
-                            <PrimaryButton onClick={()=>Link('/cart')} primary><span>View bag</span></PrimaryButton>
+                            <PrimaryButton onClick={()=>this.Link('/cart')}><span>View bag</span></PrimaryButton>
+                            <PrimaryButton onClick={()=>this.Link('/cart')} primary><span>View bag</span></PrimaryButton>
                             
                         </ButtonBar>
                         
@@ -101,8 +103,9 @@ const Header = ({category}) => {
                 </CartSign>
             </Right>
         </ContainerHead>
-        </>
-    );
+    }
+        </Query>
+    );}
 }
 
 const ContainerHead = styled(Container)`
@@ -234,13 +237,13 @@ const TotalPrice = styled.div`
 
 
 const LogoWraper = styled.div`
-display:flex;
-align-items:center;
-justify-content:center;
+// display:flex;
+// align-items:center;
+// justify-content:center;
    position:absolute;
-    right:0;
-    left:0;
-    z-index:-2;
+   margin:auto;
+    right:calc(50% - 20px);
+    z-index:2;
 `
 
 const ButtonBar = styled.div`
@@ -274,4 +277,4 @@ text-align: center;
 text-transform: uppercase;
 `
 
-export default Header;
+export default withRouter( Header);

@@ -7,42 +7,121 @@ import {
     BrowserRouter as Router,
     Switch,
     Route,
-    Link
+    withRouter
 } from "react-router-dom";
-import { useState , useContext} from 'react';
+import {  Component } from 'react';
 import styled from 'styled-components'
-import {useOpendState, useOpendDispatch} from './services/context/WhatWindowIsOpen.js'
+import {MainContext} from './services/context'
 
-function App() {
-    const isGrey = useOpendState();
-    const [Category, setCategory]=useState('')
-    return (
-        <Router>
-            <Container>
-                <Header category={{Category, setCategory}}/>
+class App extends Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            Category: '',
+            setCategory: this.setCategory,
+            Cart: {},
+            setCart: this.setCart,
+            Currency: 'USD',
+            setCurrency: this.setCurrency,
+            Opend: '',
+            setOpend: this.setOpend
+        }
+    }
 
-                <Grey disabled={isGrey}/>
-                    <Switch>
+    setCategory=(action)=> {
+        this.setState({
+            Category: action
+        })
+    }
 
-                        <Route path="/cart">
-                            <CartPage />
-                        </Route>
-                        <Route path="/description/:itemID">
-                            <DescriptionPage  />
-                        </Route>
+    setCart=(action)=> {
+        this.setState({ Cart: reducer(this.state.Cart, action) })
 
-                        <Route path="/">
-                            <MainPage category={{Category, setCategory}}/>
-                        </Route>
-                    </Switch>
-                
-            </Container>
-        </Router>
-    );
+        function reducer(state, action) {
+            action.num = action.num ? action.num : 1
+
+            console.log(action)
+            switch (action.type) {
+                case 'add': {
+                    let obj = state;
+
+                    if (typeof obj[action.id] != 'undefined') {
+                        obj[action.id].amount += action.num;
+                        return { ...obj }
+                    }
+
+                    obj[action.id] = {
+                        amount: action.num,
+                        name: action.name,
+                        price: action.price,
+                        img: action.img,
+                        attributes:JSON.parse(JSON.stringify(action.attributes))
+                    }
+                    return { ...obj }
+                }
+                case 'delete': {
+                    let obj = state;
+                    if (typeof obj[action.id] != 'undefined') {
+                        obj[action.id].amount -= action.num;
+                        if (obj[action.id].amount <= 0) {
+                            delete obj[action.id]
+                        }
+                        return { ...obj }
+                    }
+
+                    return obj
+                }
+                default:
+                    throw Error('Cart dont have this atribute' + action)
+            }
+        }
+
+    }
+
+    setCurrency=(action)=> {
+        this.setState({
+            Currency: action
+        })
+    }
+
+    setOpend=(action)=> {
+        this.setState({
+            Opend: action
+        })
+    }
+
+    render() {
+        console.log(this.context)
+        return (
+            <MainContext.Provider value={this.state}>
+                <Router>
+                    <Container>
+                        <Header/>
+
+                        <Grey disabled={this.state.Opend!==''} />
+                        <Switch>
+
+                            <Route path="/cart">
+                                {withRouter(CartPage )}
+                            </Route>
+                            <Route path="/description/:itemID" >
+                                {withRouter(DescriptionPage )}
+                            </Route>
+
+                            <Route path="/">
+                                {withRouter(MainPage )}
+                            </Route>
+                        </Switch>
+
+                    </Container>
+                </Router>
+            </MainContext.Provider>
+        );
+    }
 }
 
 const Grey = styled.div`
-    display:${(props)=>!props.disabled?'none':'block'};
+    display:${(props) => !props.disabled ? 'none' : 'block'};
     background-color: black;
     opacity:80%;
     z-index:5;

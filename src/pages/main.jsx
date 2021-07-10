@@ -1,28 +1,23 @@
 import React, { Component } from 'react';
 import MiddleItem from '../components/middle-size-item';
-import test from '../assets/test.png'
 import styled from 'styled-components';
-import { Container } from '../styled-components-folder/Container'
-import Header from '../components/header';
-import { useQuery } from '@apollo/client';
 import {GET_ALL_ITEMS_BY_TYPE} from '../services/graphql/main'
-import { MoneyTypeSymbol } from '../assets/Constants';
+import Query from '../services/graphql/component'
+import {MainContext} from '../services/context'
 
-const MainPage = ({category}) => {
-    const { data, loading, error, refetch } = useQuery(GET_ALL_ITEMS_BY_TYPE,{
-        variables: { title:category.Category},
-    })
+class MainPage extends Component {
+    static contextType=MainContext;
 
+    
+render(){
     return (
         <>
-
-            <Text>Category name</Text>
-            {loading?
+        <Text>Category name</Text>
+        <Query Querry={GET_ALL_ITEMS_BY_TYPE} 
+        varr={{variables:{title:this.context.Category}}}>{
+            (data,loading)=>loading?
             <p>loading...</p>:
-            <Grid>
-
-            {
-            console.log(data)}{
+            <Grid>{console.log(data)}{
             data.category.products.map((value) => {
                 return <MiddleItem ImgURL={value.gallery[0]}
                     Name={value.name}
@@ -33,8 +28,9 @@ const MainPage = ({category}) => {
             </Grid>
             }
             
+        </Query>
         </>
-    );
+    );}
 }
 export default MainPage;
 

@@ -1,26 +1,21 @@
 import React, { Component } from 'react';
-import MiddleItem from '../components/middle-size-item';
-import test from '../assets/test.png'
 import styled, { css } from 'styled-components';
-import { Container } from '../styled-components-folder/Container'
-import Header from '../components/header';
 import { COLORS } from '../assets/Constants'
 import { Price } from '../styled-components-folder/Price';
-import Plus from '../components/small/plus';
-import Minus from '../components/small/minus';
 import PriceConv from '../services/priceConverter';
-import { useCurrencyState } from '../services/context/Currency';
-import { useCartState, useCartDispatch } from '../services/context/Cart';
+import {MainContext} from '../services/context'
+import {teakeID} from '../services/CreateID'
 
-const CartPage = () => {
-    
-    const Currency=useCurrencyState()
-    const Cart=useCartState()
-    const setCart=useCartDispatch()
+class CartPage extends Component{
+    static contextType=MainContext;
 
+
+    render(){
     let Description = 'Running Short';
-
-
+        console.log(this.context)
+    const Cart=this.context.Cart
+    const setCart=this.context.setCart
+    const Currency=this.context.Currency
     return (
         <>
 
@@ -37,21 +32,33 @@ const CartPage = () => {
                             {PriceConv(Cart, Currency, el)}
                         </Price>
                         <FlexRowTwo>
-                            <SizeButton>S</SizeButton>
-                            <SizeButton isActive>M</SizeButton>
+                            {
+                            Object.keys(Cart[el].attributes).map(
+                                (key) => {
+                                    let atr = Cart[el].attributes[key]
+                                    if (atr.type === 'text')
+                                        return (<SizeButton >
+                                            {atr.displayValue}
+                                        </SizeButton>)
+                                    if (atr.type === 'swatch')
+                                        return (<SizeButton style={{ borderColor: atr.value }}>
+                                            {atr.displayValue}
+                                        </SizeButton>)
+                                }
+                            )
+                        }
                         </FlexRowTwo>
                     </FlexColTwo>
                     <FlexCol>
-                        <Square onClick={()=>setCart({type:'add',name:Cart[el].name})}>+</Square>
+                        <Square onClick={()=>setCart({type:'add',id: teakeID(Cart[el])})}>+</Square>
                         <i>{Cart[el].amount}</i>
-                        <Square onClick={()=>setCart({type:'delete',name:Cart[el].name})}>-</Square>
+                        <Square onClick={()=>setCart({type:'delete',id: teakeID(Cart[el])})}>-</Square>
                     </FlexCol>
 
                     <Image src={Cart[el].img} alt="kek" />
                 </FlexRow>
             })}
-        </>
-    );
+        </>);}
 }
 
 
