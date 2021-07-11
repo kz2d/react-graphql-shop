@@ -37,7 +37,7 @@ class MiddleItem extends Component {
                     <Price>{MoneyTypeSymbol[Currency] + this.props.InpPrice.find((e) =>
                         Currency === e.currency).amount
                     }</Price>
-                </Link>
+                
 
                 <CartCircle >
                     {/* onClick={() => {
@@ -45,6 +45,7 @@ class MiddleItem extends Component {
                 }} */}
                     <Cart />
                 </CartCircle>
+                </Link>
             </Container>
         );
     }

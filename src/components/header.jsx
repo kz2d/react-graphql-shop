@@ -78,7 +78,8 @@ class Header extends Component {
                     </CartWraper>
                     <SmallCart 
                      style={{opacity:WhatToShow==='Cart'?'100%':'0', display:WhatToShow==='Cart'?'':'none'}}>
-                        <h2>My Bag</h2>, 2 items
+                        <h2>My Bag</h2>, {Object.keys(Cart).length} items
+                        <Wrap>
                         {Object.keys(Cart).map((el)=>{
                             let specialPrice=Cart[el].price.find((e)=>
                             Currency===e.currency ).amount;
@@ -87,6 +88,7 @@ class Header extends Component {
                             return <SmallItem item={Cart[el]}
                             key={el}/>
                         })}
+                        </Wrap>
                         
                         <TotalPrice>
                             <p>Total</p>
@@ -212,6 +214,12 @@ const SmallCart = styled.div`
     h2{
         display:contents;
     }
+`
+
+const Wrap=styled.div`
+    max-height:50vh;
+    overflow:auto;
+    padding-top:14px;
 `
 
 

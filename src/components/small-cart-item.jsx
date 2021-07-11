@@ -59,7 +59,7 @@ class SmallItem extends Component {
 
 const FlexRow = styled.div`
     display:flex;
-    padding-top:14px;
+    padding-bottom:14px;
 `
 
 const FlexRowTwo = styled(FlexRow)`

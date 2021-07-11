@@ -7,7 +7,7 @@ import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client'
 
 
 const client = new ApolloClient({
-  uri: 'http://port-4000.my-first-container-avidex111391748.codeanyapp.com/',//http://localhost:4000
+  uri: 'https://port-4000-my-first-container-avidex111391748.codeanyapp.com/',//http://localhost:4000
   cache: new InMemoryCache()
 })
 

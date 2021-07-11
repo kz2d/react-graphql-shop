@@ -74,6 +74,7 @@ class DescriptionPage extends Component {
                                                             <Button onClick={() => {
                                                                 let obj = this.state.attributes
                                                                 obj[atr.name].value = val.value
+                                                                obj[atr.name].displayValue = val.displayValue
                                                                 this.setState({ attributes: { ...obj } })
                                                             }}
                                                                 selected={this.state.attributes[atr.name].value === val.value}

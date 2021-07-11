@@ -6,10 +6,11 @@ const empty=()=>{};
 const Query=(props)=>{
     const {children, Querry, varr={}, callback=empty }=props
     console.log(props)
-    const {data,loading, error, refeatch} = useQuery(Querry,varr)
+    let {data,loading, error, refeatch} = useQuery(Querry,varr)
     useEffect(() => {
         callback(data)
     }, [data])
+    loading=loading&&!!data
      return children?children(data, loading):null
      
 }
