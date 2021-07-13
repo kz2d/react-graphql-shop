@@ -1,22 +1,20 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import { ApolloProvider, ApolloClient, InMemoryCache } from '@apollo/client'
+import React from "react";
+import ReactDOM from "react-dom";
+import "./index.css";
+import App from "./App";
+import { ApolloProvider, ApolloClient, InMemoryCache } from "@apollo/client";
 //import reportWebVitals from './reportWebVitals';
 
-
 const client = new ApolloClient({
-  uri: 'https://port-4000-my-first-container-avidex111391748.codeanyapp.com/',//http://localhost:4000
-  cache: new InMemoryCache()
-})
-
+  uri: "http://localhost:4000", //http://localhost:4000
+  cache: new InMemoryCache(),
+});
 
 ReactDOM.render(
   <ApolloProvider client={client}>
     <App />
-    </ApolloProvider>,
-  document.getElementById('root')
+  </ApolloProvider>,
+  document.getElementById("root")
 );
 
 // If you want to start measuring performance in your app, pass a function

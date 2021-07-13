@@ -1,26 +1,24 @@
-import {gql} from '@apollo/client'
+import { gql } from "@apollo/client";
 
 export const GET_ALL_CURRENCY = gql`
-    query {
-        currencies
-    }    
-`
+  query {
+    currencies
+  }
+`;
 
 export const GET_ALL_ITEMS_BY_TYPE = gql`
-    query category($title: String!){
-        category(input:{
-    title:$title
-  }) {
-    products {
-      name
-      inStock
-      gallery
-      category
-      prices{
-        currency
-        amount
+  query category($title: String!) {
+    category(input: { title: $title }) {
+      products {
+        name
+        inStock
+        gallery
+        category
+        prices {
+          currency
+          amount
+        }
       }
     }
-        }
-    }    
-`
+  }
+`;
