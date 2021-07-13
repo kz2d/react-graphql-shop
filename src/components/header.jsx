@@ -16,7 +16,6 @@ class Header extends Component {
   static contextType = MainContext;
 
   link(href) {
-    console.log(this.props);
     this.context.setWhatToShow("");
     this.props.history.push(href);
   }
@@ -65,7 +64,6 @@ class Header extends Component {
 
   smallCart() {
     let sum = 0;
-    console.log(this.context);
     const { Currency, Cart, WhatToShow } = this.context;
     return (
       <SmallCart

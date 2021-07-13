@@ -35,7 +35,6 @@ class SmallItem extends Component {
 
   render() {
     const { Cart, setCart, Currency } = this.context;
-    console.log(this.props);
     return (
       <FlexRow>
         <FlexColTwo>

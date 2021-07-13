@@ -11,7 +11,6 @@ class MiddleItem extends Component {
   static contextType = MainContext;
   render() {
     const {Currency} = this.context;
-    console.log(Currency);
 
     if (!this.props.isStock)
       return (

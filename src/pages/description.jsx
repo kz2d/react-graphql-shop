@@ -78,7 +78,6 @@ class DescriptionPage extends Component {
   }
 
   render() {
-    console.log(this.props);
     const { itemID } = this.props.match.params;
     const { Currency, setCart } = this.context;
     return (

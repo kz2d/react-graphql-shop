@@ -7,7 +7,6 @@ const Query = ({ children, Querry, varr = {} }) => {
   if (typeof data == "undefined") {
     loading = true;
   }
-  console.log(resp);
   return children ? children(data, loading) : null;
 };
 

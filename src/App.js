@@ -40,7 +40,6 @@ class App extends Component {
     function reducer(state, action) {
       action.num = action.num ? action.num : 1;
 
-      console.log(action);
       switch (action.type) {
         case "add": {
           const obj = state;
@@ -90,7 +89,6 @@ class App extends Component {
   };
 
   render() {
-    console.log(this.context);
     return (
       <MainContext.Provider value={this.state}>
         <Router>
