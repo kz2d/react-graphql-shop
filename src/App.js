@@ -95,7 +95,7 @@ class App extends Component {
           <Container>
             <Header />
 
-            <Grey disabled={this.state.WhatToShow !== ""} />
+            <Grey disabled={this.state.WhatToShow === "Cart"} />
             <Switch>
               <Route path="/cart">{withRouter(CartPage)}</Route>
               <Route path="/description/:itemID">
