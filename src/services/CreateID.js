@@ -1,3 +1,3 @@
 export const createID = (item) => {
-  return item.name + JSON.stringify(item.attributes);
+  return item.name + JSON.stringify(item.attributes);  
 };
