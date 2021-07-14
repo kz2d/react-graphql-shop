@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import styled, { css } from "styled-components";
-import { Price } from "../styled-components-folder/Price";
-import { PrimaryButton } from "../styled-components-folder/PrimaryButton";
+import { Price } from "../styled-components-folder/price";
+import { PrimaryButton } from "../styled-components-folder/primary-button";
 import { COLORS, MoneyTypeSymbol } from "../assets/Constants";
 import { GET_ALL_ITEMS_BY_TYPE } from "../services/graphql/description";
 import Query from "../services/graphql/component";

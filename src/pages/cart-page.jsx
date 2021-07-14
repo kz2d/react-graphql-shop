@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import styled, { css } from "styled-components";
 import { COLORS } from "../assets/Constants";
-import { Price } from "../styled-components-folder/Price";
+import { Price } from "../styled-components-folder/price";
 import PriceConv from "../services/price-converter";
 import { MainContext } from "../services/context";
 import { createID } from "../services/createID";

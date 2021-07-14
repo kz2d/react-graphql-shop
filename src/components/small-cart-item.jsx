@@ -1,5 +1,5 @@
 import styled, { css } from "styled-components";
-import { Price } from "../styled-components-folder/Price";
+import { Price } from "../styled-components-folder/price";
 import Plus from "./small/plus";
 import Minus from "./small/minus";
 import { COLORS } from "../assets/Constants";

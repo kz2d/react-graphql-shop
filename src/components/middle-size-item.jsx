@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { Price } from "../styled-components-folder/Price";
+import { Price } from "../styled-components-folder/price";
 import { ReactComponent as Cart } from "../assets/svg/cart.svg";
 import { COLORS } from "../assets/Constants";
 import { Link } from "react-router-dom";

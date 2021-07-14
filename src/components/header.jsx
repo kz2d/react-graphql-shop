@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 import styled from "styled-components";
 import { Logo } from "../styled-components-folder/logo";
-import { Container } from "../styled-components-folder/Container";
+import { Container } from "../styled-components-folder/container";
 import { COLORS, MoneyTypeSymbol } from "../assets/Constants";
 import { ReactComponent as BottomArrow } from "../assets/svg/bottom-arrow.svg";
 import { ReactComponent as CartSVG } from "../assets/svg/cart.svg";
 import SmallItem from "./small-cart-item";
-import { PrimaryButton } from "../styled-components-folder/PrimaryButton";
+import { PrimaryButton } from "../styled-components-folder/primary-button";
 import { GET_ALL_CURRENCY } from "../services/graphql/header";
 import { MainContext } from "../services/context";
 import Query from "../services/graphql/component";

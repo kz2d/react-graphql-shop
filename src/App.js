@@ -1,7 +1,7 @@
 import MainPage from "./pages/main";
 import DescriptionPage from "./pages/description";
 import CartPage from "./pages/cart-page";
-import { Container } from "./styled-components-folder/Container";
+import { Container } from "./styled-components-folder/container";
 import Header from "./components/header";
 import {
   BrowserRouter as Router,
