@@ -7,5 +7,4 @@ export const Price = styled.span`
     font-weight: ${props=>props.bold?700:500};
     line-height: 29px;
     letter-spacing: 0em;
-    
 `

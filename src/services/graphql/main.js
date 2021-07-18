@@ -18,6 +18,16 @@ export const GET_ALL_ITEMS_BY_TYPE = gql`
           currency
           amount
         }
+        attributes {
+          id
+          name
+          type
+          items {
+            displayValue
+            value
+            id
+          }
+        }
       }
     }
   }

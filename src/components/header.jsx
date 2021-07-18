@@ -99,9 +99,25 @@ class Header extends Component {
     );
   }
 
+  cartSign() {
+    let quantity = 0;
+    const { WhatToShow, setWhatToShow, Cart } = this.context;
+    Object.keys(Cart).map((el) => (quantity += Cart[el].amount));
+    return (
+      <CartSign>
+        <CartWraper
+          onClick={() => setWhatToShow(WhatToShow === "Cart" ? "" : "Cart")}
+        >
+          <CartSVG />
+          <Number>{quantity}</Number>
+        </CartWraper>
+        {this.smallCart()}
+      </CartSign>
+    );
+  }
+
   render() {
-    const { WhatToShow, setWhatToShow, Cart, Category, setCategory } =
-      this.context;
+    const { Category, setCategory } = this.context;
 
     return (
       <ContainerHead>
@@ -140,15 +156,7 @@ class Header extends Component {
         </LogoWraper>
         <Right>
           {this.dolarSign()}
-          <CartSign>
-            <CartWraper
-              onClick={() => setWhatToShow(WhatToShow === "Cart" ? "" : "Cart")}
-            >
-              <CartSVG />
-              <Number>{Object.keys(Cart).length}</Number>
-            </CartWraper>
-            {this.smallCart()}
-          </CartSign>
+          {this.cartSign()}
         </Right>
       </ContainerHead>
     );
@@ -173,6 +181,7 @@ const LeftItem = styled.div`
   display: grid;
   align-items: center;
   justify-items: center;
+  cursor:pointer;
   border-bottom: ${(props) => (props.selected ? "2px" : 0)} solid
     ${COLORS.primary};
   span {
@@ -232,14 +241,7 @@ const DolarSign = styled.div`
 const CartSign = styled.div`
   display: flex;
   align-items: center;
-  span {
-    font-family: "Raleway";
-    font-style: normal;
-    font-weight: 500;
-    font-size: 18px;
-    line-height: 160%;
-    padding: 0 12px;
-  }
+ 
   position: relative;
 `;
 const SmallCart = styled.div`

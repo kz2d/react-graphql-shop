@@ -16,24 +16,31 @@ class SmallItem extends Component {
       const atr = this.props.attributes[key];
       if (atr.type === "text")
         return (
-          <SizeButton key={atr.name + atr.displayValue}>
-            {atr.displayValue}
-          </SizeButton>
+          <>
+            <NameOfAttribute>{atr.name}:</NameOfAttribute>
+            <SizeButton key={atr.name + atr.displayValue}>
+              {atr.displayValue}
+            </SizeButton>
+          </>
         );
       if (atr.type === "swatch")
         return (
-          <SizeButton
-            style={{ borderColor: atr.value }}
-            key={atr.name + atr.displayValue}
-          >
-            {atr.displayValue}
-          </SizeButton>
+          <>
+            <NameOfAttribute>{atr.name}:</NameOfAttribute>
+            <SizeButton
+              style={{ borderColor: atr.value }}
+              key={atr.name + atr.displayValue}
+            >
+              {atr.displayValue}
+            </SizeButton>
+          </>
         );
       return null;
     });
   }
 
   render() {
+    console.log(this.props);
     const { Cart, setCart, Currency } = this.context;
     return (
       <FlexRow>
@@ -61,7 +68,7 @@ class SmallItem extends Component {
           />
         </FlexCol>
 
-        <Image src={this.props.img} alt="kek" />
+        <Image src={this.props.gallery[0]} alt="kek" />
       </FlexRow>
     );
   }
@@ -74,6 +81,7 @@ const FlexRow = styled.div`
 
 const FlexRowTwo = styled(FlexRow)`
   padding: 0;
+  flex-direction: column;
 `;
 
 const FlexCol = styled.div`
@@ -95,13 +103,20 @@ const FlexCol = styled.div`
 `;
 
 const FlexColTwo = styled(FlexCol)`
-  width: 180px;
+  width: 210px;
   padding-right: 18px;
+`;
+
+const NameOfAttribute = styled.div`
+  font-weight: 600;
+    font-size: 20px;
+    padding-right:10px;
 `;
 
 const SizeButton = styled.a`
   border: 1px solid ${COLORS.text};
   min-width: 24px;
+  width:min-content;
   height: 24px;
   display: grid;
   place-content: center center;

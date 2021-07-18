@@ -14,11 +14,13 @@ class MainPage extends Component {
         {data.category.products.map((value) => {
           return (
             <MiddleItem
-              ImgURL={value.gallery[0]}
-              name={value.name}
-              InpPrice={value.prices}
-              isStock={value.inStock}
-              key={value.name}
+            {...value}  
+            history={this.props.history}
+            // ImgURL={value.gallery[0]}
+              // name={value.name}
+              // InpPrice={value.prices}
+              // isStock={value.inStock}
+              // key={value.name}
             />
           );
         })}

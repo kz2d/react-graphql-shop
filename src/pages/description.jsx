@@ -16,6 +16,7 @@ class DescriptionPage extends Component {
     super(props);
     this.state = {
       attributes: {},
+      img:""
     };
   }
 
@@ -97,7 +98,7 @@ class DescriptionPage extends Component {
                 value: atr.items[0].value,
                 displayValue: atr.items[0].displayValue,
               };
-              this.setState({ attributes: { ...obj } });
+              this.setState({ attributes: { ...obj } , img:product.gallery[0]});
             }
             return null;
           });
@@ -107,12 +108,11 @@ class DescriptionPage extends Component {
               <FlexRow style={{ padding: "80px 0 0 0" }}>
                 <FlexCol>
                   {product.gallery
-                    .slice(1, product.gallery.length - 1)
                     .map((el) => {
-                      return <SmallImg src={el} key={el} />;
+                      return <SmallImg src={el} key={el} onClick={()=>this.setState({img:el})}/>;
                     })}
                 </FlexCol>
-                <BigImg src={product.gallery[0]} />
+                <BigImg src={this.state.img} />
                 <FlexCol style={{ width: "300px" }}>
                   <h3>{product.name}</h3>
                   <h5>{product.category}</h5>
@@ -133,7 +133,7 @@ class DescriptionPage extends Component {
                           attributes: this.state.attributes,
                         }),
                         name: product.name,
-                        img: product.gallery[0],
+                        gallery: product.gallery,
                         price: product.prices,
                         attributes: this.state.attributes,
                       });
@@ -192,6 +192,7 @@ const SmallImg = styled.img`
   width: 85px;
   object-fit: cover;
   margin-bottom: 32px;
+  cursor:pointer;
 `;
 
 const BigImg = styled.img`
@@ -209,6 +210,7 @@ const Button = styled.span`
   place-content: center center;
   font-size: 14px;
   margin-right: 8px;
+  cursor:pointer;
   ${(props) =>
     props.disabled &&
     css`

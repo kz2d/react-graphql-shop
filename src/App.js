@@ -53,7 +53,7 @@ class App extends Component {
             amount: action.num,
             name: action.name,
             price: action.price,
-            img: action.img,
+            gallery: action.gallery,
             attributes: JSON.parse(JSON.stringify(action.attributes)),
           };
           return { ...obj };
@@ -95,7 +95,7 @@ class App extends Component {
           <Container>
             <Header />
 
-            <Grey disabled={this.state.WhatToShow === "Cart"} />
+            <Grey used={this.state.WhatToShow} onClick={()=>this.state.setWhatToShow('')}/>
             <Switch>
               <Route path="/cart">{withRouter(CartPage)}</Route>
               <Route path="/description/:itemID">
@@ -112,16 +112,17 @@ class App extends Component {
 }
 
 const Grey = styled.div`
-  display: ${(props) => (!props.disabled ? "none" : "block")};
+  display: ${(props) => (!props.used ? "none" : "block")};
   background-color: black;
-  opacity: 80%;
+  opacity: ${(props) => (props.used==="Currency" ? "0" : "80%")};
   z-index: 5;
   position: absolute;
   top: 80px;
   right: calc(600px - 50vw + 10px);
   bottom: 0;
 
-  width: 100vw; /* or whatever */
+  min-height: calc(100vh - 80px);
+  width: 100vw;
   height: 100%;
   content: "";
   @media (max-width: 1200px) {
