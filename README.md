@@ -1,4 +1,5 @@
-[preview](https://kz2d.github.io)
+[preview previous version](https://kz2d.github.io)
+## Icon is a link to main page xD
 
 # Getting Started with Create React App
 
